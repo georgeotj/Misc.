@@ -1,0 +1,6 @@
+// This example was specifically used to eliminate whitespace, specil characters, and the substring "LLC" from a list of Fake Company Names generatred by Mockaroo. This was added to the formula section in order to be generated.
+
+if this.include? " " 
+   this = this.gsub(/[ ,'-]/,"")
+   this.chomp("LLC")
+end
