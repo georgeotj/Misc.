@@ -10,11 +10,6 @@ def getUrl(url, formsUrl, linkBeg):
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'html.parser')
     resStr = str(soup.find_all("div", {"id" : "msg_2048390"}))
-    # While the string isn't present inside the element of the site wait 5 seconds then retry
-    while linkBeg in resStr == False:
-        time.sleep(5)
-        getUrl(url, formsUrl, linkBeg)
-    # When the link does appear in the element, compile the url by going through char by char
     linkPos = resStr.find(linkBeg)
     while resStr[linkPos] != '\"':
         formsUrl+=resStr[linkPos]
@@ -23,17 +18,20 @@ def getUrl(url, formsUrl, linkBeg):
     newUrl = ''.join(formsUrl)
     return newUrl
 
-def confirmUrl(newUrl, url, formsUrl, linkBeg):
+def verifyUrl(newUrl):
     if "forms" in newUrl:
         callArtisans = "@artisans " + str(newUrl)
+        print(callArtisans)
         return callArtisans
     else:
-        getUrl(url, formsUrl, linkBeg)
+        print("No Google Form present")
+        time.sleep(5)
+        verifyUrl(newUrl)
 
 def main():
     newUrl = getUrl(url, formsUrl, linkBeg)
-    form = confirmUrl(newUrl, url, formsUrl, linkBeg)
-    print(form)
+    form =verifyUrl(newUrl)
     return str(form)
 
-main()
+if __name__ == "__main__":
+    main()
